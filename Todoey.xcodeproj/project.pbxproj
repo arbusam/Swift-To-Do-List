@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F81E3A3820377EEA00D866A2 /* CatergoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81E3A3720377EEA00D866A2 /* CatergoryViewController.swift */; };
 		F8926A86202FCB21009263E2 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F8926A84202FCB21009263E2 /* DataModel.xcdatamodeld */; };
 		F8B4B64D20256F3700801401 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B4B64C20256F3700801401 /* AppDelegate.swift */; };
 		F8B4B64F20256F3700801401 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B4B64E20256F3700801401 /* TodoListViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F81E3A3720377EEA00D866A2 /* CatergoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatergoryViewController.swift; sourceTree = "<group>"; };
 		F8926A85202FCB21009263E2 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		F8B4B64920256F3700801401 /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B4B64C20256F3700801401 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 		F834F3FC202843BB00356B6A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F81E3A3720377EEA00D866A2 /* CatergoryViewController.swift */,
 				F8B4B64E20256F3700801401 /* TodoListViewController.swift */,
 			);
 			path = Controllers;
@@ -174,6 +177,7 @@
 				F8B4B64F20256F3700801401 /* TodoListViewController.swift in Sources */,
 				F8926A86202FCB21009263E2 /* DataModel.xcdatamodeld in Sources */,
 				F8B4B64D20256F3700801401 /* AppDelegate.swift in Sources */,
+				F81E3A3820377EEA00D866A2 /* CatergoryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
