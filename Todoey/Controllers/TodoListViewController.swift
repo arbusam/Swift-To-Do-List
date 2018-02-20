@@ -76,11 +76,11 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
             
-            let newItem = Item(context: self.context)
-            newItem.title = textField.text!
-            newItem.done = false
-            newItem.parentCatergory = self.selectedCategory
-            self.itemArray.append(newItem)
+            //let newItem = Item(context: self.context)
+            //newItem.title = textField.text!
+            //newItem.done = false
+            //newItem.parentCatergory = self.selectedCategory
+            //self.itemArray.append(newItem)
             
             self.saveItems()
             
