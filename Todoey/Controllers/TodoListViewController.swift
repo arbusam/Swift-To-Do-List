@@ -55,6 +55,13 @@ class TodoListViewController: UITableViewController {
     //MARK: - TableView Delagate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let item = todoItems?[indexPath.row] {
+            try realm.write {
+                item.done = !item.done
+            }
+        }
+        
         // print(itemArray[indexPath.row])
         
         
@@ -78,19 +85,18 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
-            if let curruntCategory = self.selectedCategory {
+            if let currentCategory = self.selectedCategory {
                 do {
                     try self.realm.write {
                         let newItem = Item()
                         newItem.title = textField.text!
-                        curruntCategory.items.append(newItem)
+                        currentCategory.items.append(newItem)
                     }
                 } catch {
-                    print("Error saving new items, \(error)")
+                    print("Error saving items, \(error)")
                 }
-                
-                self.tableView.reloadData()
-                
+        }
+            
             self.tableView.reloadData()
             
         }
@@ -104,17 +110,10 @@ class TodoListViewController: UITableViewController {
         
         self.present(alert, animated: true, completion: nil)
         
-    }
-    
-    
-    
-    
-    
-    
-    
-}
  
     
+    
+    }
     func loadItems() {
         
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
