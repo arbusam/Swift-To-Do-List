@@ -8,18 +8,25 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CatergoryViewController: UITableViewController {
+class CatergoryViewController: SwipeViewController {
     let realm = try! Realm()
     
     
     var categories: Results<Category>?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadCategories()
+        
+        tableView.separatorStyle = .none
+        
     }
+        
+    //}
     
     //MARK: - TableView Datasourse Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -29,9 +36,19 @@ class CatergoryViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CatorgoyCell", for: indexPath)
         
-        cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added yet"
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        if let category = categories?[indexPath.row] {
+            cell.textLabel?.text = category.name
+            
+            guard let categoryColour = UIColor(hexString: category.hex) else {fatalError()}
+            
+            cell.backgroundColor = categoryColour
+            cell.textLabel?.textColor = ContrastColorOf(categoryColour, returnFlat: true)
+        }
+        
+        //cell.delegate = self
         
         return cell
     }
@@ -55,18 +72,20 @@ class CatergoryViewController: UITableViewController {
         
         categories = realm.objects(Category.self)
         
-        
-        //let request : NSFetchRequest<Category> = Category.fetchRequest()
-        
-        //do {
-        //categories = try context.fetch(request)
-        //} catch {
-        //    print("Error loading categories \(error)")
-        //}
-        
-        //tableView.reloadData()
-        
-        
+
+        tableView.reloadData()
+    }
+    
+    override func updadateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categories?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error deleting category, \(error)")
+            }
+        }
     }
     
     //MARK: - Add New Categories
@@ -80,6 +99,7 @@ class CatergoryViewController: UITableViewController {
             
             let newCatergory = Category()
             newCatergory.name = textField.text!
+            newCatergory.hex = UIColor.randomFlat.hexValue()
             
             self.save(category: newCatergory)
             

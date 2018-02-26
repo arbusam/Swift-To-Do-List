@@ -8,11 +8,14 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeViewController {
     
     var todoItems: Results<Item>?
     let realm = try! Realm()
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory : Category? {
         didSet{
@@ -23,9 +26,35 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        tableView.separatorStyle = .none
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let colourHex = selectedCategory?.hex else{fatalError()}
+            
+        title = selectedCategory!.name
+            
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation controller does not exist")}
+            
+        guard let navBarColour = UIColor(hexString: colourHex) else {fatalError()}
+        navBar.barTintColor = navBarColour
+                
+        navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
+                
+        navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : ContrastColorOf(navBarColour, returnFlat: true)]
+                
+        searchBar.barTintColor = navBarColour
         
+            
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let originalColour = UIColor(hexString: "1DB8F6") else {fatalError()}
+        
+        navigationController?.navigationBar.barTintColor = originalColour
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: FlatWhite()]
     }
     
     //MARK: - Tableview Datasource Methods
@@ -36,10 +65,20 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
+            
+            if let colour = UIColor(hexString: selectedCategory!.hex)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)) {
+                cell.backgroundColor = colour
+                cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
+            }
+            
+            //print("version 1: \(CGFloat(indexPath.row / todoItems!.count))")
+            
+            //print("version 2: \(CGFloat(indexPath.row) / CGFloat((todoItems!.count)))")
+            
             
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
@@ -117,6 +156,18 @@ class TodoListViewController: UITableViewController {
         
         tableView.reloadData()
         
+    }
+    
+    override func updadateModel(at indexPath: IndexPath) {
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(item)
+                }
+            } catch {
+                print("Error deleting item, \(error)")
+            }
+        }
     }
 }
 
